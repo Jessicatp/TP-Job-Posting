@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>岗位详情</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .job-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .job-salary {
+            color: #f1c40f;
+            font-weight: 600;
+        }
+        
+        .job-content {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            width: 48%;
+            transition: all 0.3s;
+        }
+        
+        .btn-share {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-apply {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 300px;
+            width: 90%;
+        }
+        
+        .modal-content img {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .close-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            color: #95a5a6;
+            font-size: 14px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="job-title">前端开发工程师</h1>
+            <div class="job-meta">
+                <span id="job-location">北京</span>
+                <span class="job-salary" id="job-salary">15k-30k</span>
+            </div>
+        </div>
+        
+        <div class="job-content">
+            <div class="section">
+                <h2>岗位职责</h2>
+                <ul id="job-responsibilities">
+                    <li>负责公司产品的前端开发工作</li>
+                    <li>参与项目架构设计和技术选型</li>
+                    <li>优化前端性能，提升用户体验</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>任职要求</h2>
+                <ul id="job-requirements">
+                    <li>3年以上前端开发经验</li>
+                    <li>精通HTML/CSS/JavaScript</li>
+                    <li>熟悉Vue/React框架</li>
+                    <li>良好的沟通能力和团队协作精神</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>福利待遇</h2>
+                <ul id="job-benefits">
+                    <li>五险一金</li>
+                    <li>年度体检</li>
+                    <li>带薪年假</li>
+                    <li>弹性工作制</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-share" onclick="shareJob()">分享岗位</button>
+            <button class="btn btn-apply" onclick="showQRCode()">立即投递</button>
+        </div>
+        
+        <div id="qrModal" class="modal">
+            <div class="modal-content">
+                <h3>扫码投递简历</h3>
+                <img src="../images/wechat-qr.png" alt="微信二维码">
+                <p>请添加HR微信并发送简历</p>
+                <button class="close-btn" onclick="closeModal()">关闭</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 公司名称 版权所有</p>
+        </div>
+    </div>
+    
+    <script>
+        function showQRCode() {
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+        
+        function shareJob() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.getElementById('job-title').textContent,
+                    text: '看看这个工作机会：' + document.getElementById('job-title').textContent,
+                    url: window.location.href
+                })
+                .catch(err => {
+                    alert('分享失败: ' + err);
+                });
+            } else {
+                alert('请使用微信右上角的分享功能');
+            }
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('qrModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
